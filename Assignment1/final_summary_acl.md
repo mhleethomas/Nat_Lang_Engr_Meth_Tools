@@ -1,8 +1,8 @@
-# Sentiment140 Preprocessing Summary (ACL Style)
+# Sentiment140 Preprocessing Summary
 
 **Author:** MingHsiang Lee  
 **Course:** INFO 7610  
-**Assignment:** Text Data Analysis and Preprocessing  
+**Assignment:** Dataset Selection and Preparation  
 **Date:** 2026-02-04
 
 ## Abstract
@@ -43,16 +43,16 @@ Applied the following steps:
 
 ## 4. Data Statistics (Final)
 **All values can be updated after re-running the notebook.**
-- **Final dataset size:** 1,XXX,XXX tweets
-- **Negative (0):** XXX,XXX (XX.XX%)
-- **Positive (1):** XXX,XXX (XX.XX%)
-- **Avg tokens per tweet:** XX.XX
-- **Text length (mean):** XX.XX characters
+- **Final dataset size:** 1,578,669 tweets
+- **Negative (0):** 788,695 (49.96%)
+- **Positive (1):** 789,974 (50.04%)
+- **Avg tokens per tweet:** 9.12
+- **Text length (mean):** 65.08 characters
 
 ## 5. Data Splits (Stratified)
-- **Train:** 70% (XXX,XXX)
-- **Validation:** 15% (XXX,XXX)
-- **Test:** 15% (XXX,XXX)
+- **Train:** 70% (1,105,068)
+- **Validation:** 15% (236,800)
+- **Test:** 15% (236,801)
 - **Stratification:** Maintained label distribution across splits.
 
 ## 6. Output Files
