@@ -6,10 +6,10 @@
 **Date:** 2026-02-04
 
 ## Abstract
-This report summarizes the preprocessing pipeline applied to the Sentiment140 dataset (1.6M tweets). The workflow includes duplicate removal, text cleaning, tokenization, stopword removal, lemmatization (with stemming for comparison), and dataset splitting into train/validation/test sets. Basic statistics and output artifacts are reported for downstream sentiment analysis.
+This report presents a preprocessing pipeline applied to the Sentiment140 dataset (1.6M tweets). The workflow covers duplicate removal, text cleaning, tokenization, stopword removal, lemmatization (with stemming for comparison), and dataset splitting into train/validation/test sets. Basic statistics are included for downstream sentiment analysis.
 
 ## 1. Introduction
-Sentiment140 is a large-scale dataset of tweets labeled for sentiment. I preprocess the data to reduce noise, normalize text, and generate consistent inputs for machine learning models.
+Sentiment140 is a large-scale dataset of tweets labeled for sentiment. Data preprocessing reduces noise, normalizes text, and produces consistent inputs for machine learning models.
 
 ## 2. Dataset Used
 - **Source:** Kaggle – Sentiment140 (KazAnova)
