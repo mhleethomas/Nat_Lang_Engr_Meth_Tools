@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Thumbnails
+._*
+
+# Spotlight, Time Machine, Trashes
+.Spotlight-V100
+.Trashes
+
+# Files that might appear on external drives
+.fseventsd
+.DS_Store?
+
+# Large data files
+*.csv
