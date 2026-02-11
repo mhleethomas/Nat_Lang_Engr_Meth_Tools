@@ -30,6 +30,12 @@ Error Analysis
   - ORG vs PER confusions on person names in organization contexts
   - Boundary errors on multi-token entities
 
+Entity-Level Misclassification Summary (CRF)
+- Misclassified entities are grouped by true entity type using the CRF test outputs.
+- Most confusions appear in ORG and LOC, often driven by ambiguous surface forms (e.g., country names used as organizations).
+- PER errors are frequently due to boundary mistakes on multi-token names.
+- See the notebook error log for representative misclassified tokens and their predicted labels.
+
 Findings
 - CRF performs strongly with rich local features and POS signals.
 - BiLSTM captures longer-range context but needs more tuning and epochs.
