@@ -15,5 +15,34 @@ Icon
 .fseventsd
 .DS_Store?
 
+# Python virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Model checkpoints and weights
+*.pt
+*.pth
+*.bin
+*.h5
+*.pkl
+*.ckpt
+
+# HuggingFace cache
+.cache/
+transformers_cache/
+
 # Large data files
 *.csv
