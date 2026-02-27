@@ -46,41 +46,41 @@ Shared training setup in the notebook:
 This satisfies the assignment requirement to use suitable optimization and stabilization techniques.
 
 ## Evaluation Methodology
-The notebook computes both required evaluation views.
-
 1. Entity-level metrics (strict NER scoring)
-- Precision
-- Recall
-- F1-score
-- Per-entity breakdown via `seqeval` report
+    - Precision
+    - Recall
+    - F1-score
+    - Per-entity breakdown via `seqeval` report
 
 2. Token-level metrics
-- Micro Precision
-- Micro Recall
-- Micro F1
-- Token-level classification report
+    - Micro Precision
+    - Micro Recall
+    - Micro F1
+    - Token-level classification report
 
 3. Error-focused diagnostics
-- Token-level confusion matrix (BIO labels)
-- Top misclassification pairs (true label -> predicted label)
+    - Token-level confusion matrix (BIO labels)
+    - Top misclassification pairs (true label -> predicted label)
 
 ## Results
 
 ### Overall Metrics
 | Metric | BERT | DeBERTa |
 |---|---:|---:|
-| Entity Precision | 0.9042 | 0.0309 |
-| Entity Recall | 0.9187 | 0.2542 |
-| Entity F1 | 0.9114 | 0.0551 |
-| Token F1 | 0.9824 | 0.0359 |
-| Inference Time (s) | 52.25 | 19.81 |
+| Entity Precision | **0.9042** ✓ | 0.0309 |
+| Entity Recall | **0.9187** ✓ | 0.2542 |
+| Entity F1 | **0.9114** ✓ | 0.0551 |
+| Token F1 | **0.9824** ✓ | 0.0359 |
+| Inference Time (s) | 52.25 | **19.81** ✓ |
+
+**Note:** BERT dominates on all accuracy metrics (precision, recall, F1 at both levels). DeBERTa is only faster but lacks practical utility due to near-zero accuracy. BERT is the clear winner overall.
 
 ### Comparison to Assignment 2
 | Model | Entity F1 |
 |---|---:|
 | CRF (Assignment 2) | 0.7905 |
 | BiLSTM (Assignment 2) | 0.6347 |
-| BERT (Assignment 3) | 0.9114 |
+| BERT (Assignment 3) | **0.9114** ✓ |
 | DeBERTa (Assignment 3) | 0.0551 |
 
 **Key Observation:** BERT dramatically outperforms both Assignment 2 models, achieving 15.3% absolute improvement over CRF (0.9114 vs 0.7905) and 28.9% over BiLSTM. DeBERTa's poor performance indicates convergence issues on this task despite architectural advantages.
@@ -161,9 +161,3 @@ While BERT achieves 0.9114 F1, further improvements are possible:
 - Confusion matrix for misclassified entities: satisfied
 - Misclassification analysis and systematic errors: satisfied
 - Discussion of winner, trade-offs, pretraining impact, improvements: satisfied
-
-## Final Note
-The notebook has been cleaned and structured as a single end-to-end pipeline in:
-- `Assignment3_NER_Transformer_Models/MingHsiangLee_Assignment3.ipynb`
-
-Run it once to populate the final numeric values in this report.
