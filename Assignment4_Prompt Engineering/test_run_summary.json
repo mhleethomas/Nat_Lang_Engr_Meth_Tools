@@ -1,0 +1,30 @@
+{
+  "use_fast_mode": true,
+  "fast_sentence_limit": 80,
+  "evaluated_sentences": 80,
+  "full_sentences": 3250,
+  "models": [
+    "google/flan-t5-small",
+    "google/flan-t5-base"
+  ],
+  "prompts": [
+    "zero_shot_plain",
+    "zero_shot_rubric",
+    "few_shot_compact",
+    "few_shot_balanced"
+  ],
+  "calls_metrics": 640,
+  "calls_logs": 40,
+  "model_load_seconds": 2.023,
+  "metrics_seconds": 342.843,
+  "logs_seconds": 33.991,
+  "total_seconds": 378.857,
+  "avg_seconds_per_metric_call": 0.535692,
+  "estimated_full_metrics_seconds": 13927.993,
+  "estimated_full_total_no_download_seconds": 13961.984,
+  "estimated_full_total_no_download_minutes": 232.7,
+  "estimated_full_total_no_download_hours": 3.88,
+  "best_model": "google/flan-t5-small",
+  "best_prompt": "zero_shot_plain",
+  "best_f1": 0.0
+}
