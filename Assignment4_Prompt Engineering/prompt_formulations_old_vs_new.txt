@@ -1,0 +1,125 @@
+Prompt Archive: Old vs New
+
+Purpose:
+- OLD prompts = the version used in the overnight run.
+- NEW prompts = the updated version prepared for the next run.
+
+Source files:
+- OLD: Assignment4_Prompt Engineering/run_fast_test_ner.py
+- NEW: Assignment4_Prompt Engineering/MingHsiangLee_Assignment4.ipynb (PROMPTS cell)
+
+==================================================
+OLD PROMPTS (overnight run)
+==================================================
+
+[zero_shot_plain]
+Named Entity Recognition task.
+Extract all named entities from the text.
+Classify each as: PER (person), ORG (organization), LOC (location), MISC (other named entity).
+The text may be in ALL CAPS. Still extract entities.
+Respond with a JSON array only. No explanation. No code.
+Format: [{"entity": "name", "type": "TYPE"}, ...]
+If no named entities exist, respond: []
+
+Text: {text}
+JSON:
+
+[zero_shot_rubric]
+You are an expert Named Entity Recognition system.
+Label every named entity in the input text using these rules:
+  PER  = person name (e.g. Barack Obama, Sampras)
+  ORG  = organization, team, or company (e.g. Reuters, FIFA, Leicestershire)
+  LOC  = location or place (e.g. London, France, Africa)
+  MISC = other named entity (e.g. nationality adjectives, event names)
+The text may be in ALL CAPS. Still identify entities.
+Output ONLY a JSON array: [{"entity": "...", "type": "..."}]. No code. No prose.
+
+Text: {text}
+JSON:
+
+[few_shot_caps]
+Extract named entities. Types: PER, ORG, LOC, MISC. Return JSON array only.
+
+Text: LEICESTERSHIRE BEAT NOTTINGHAMSHIRE IN CRICKET FINAL .
+Output: [{"entity": "LEICESTERSHIRE", "type": "ORG"}, {"entity": "NOTTINGHAMSHIRE", "type": "ORG"}]
+
+Text: LONDON 1996-08-30
+Output: [{"entity": "LONDON", "type": "LOC"}]
+
+Text: UNITED STATES BEAT GERMANY 2-1 .
+Output: [{"entity": "UNITED STATES", "type": "LOC"}, {"entity": "GERMANY", "type": "LOC"}]
+
+Text: {text}
+Output:
+
+[few_shot_balanced]
+Extract named entities from text. Types: PER=person, ORG=organization, LOC=location, MISC=other.
+Return JSON array only.
+
+Text: THE MATCH WAS PLAYED IN PARIS .
+Output: [{"entity": "PARIS", "type": "LOC"}]
+
+Text: JOHN SMITH JOINS REUTERS IN NEW YORK .
+Output: [{"entity": "JOHN SMITH", "type": "PER"}, {"entity": "REUTERS", "type": "ORG"}, {"entity": "NEW YORK", "type": "LOC"}]
+
+Text: THE WEATHER WAS FINE YESTERDAY .
+Output: []
+
+Text: {text}
+Output:
+
+==================================================
+NEW PROMPTS (next run)
+==================================================
+
+[zero_shot_plain]
+Named Entity Recognition task.
+Extract all named entities from the text and label each as PER, ORG, LOC, or MISC.
+Return ONLY a valid JSON array of objects with keys entity and type.
+The text may be in ALL CAPS. Copy exact entity spans from the text.
+Valid example: [{"entity":"LONDON","type":"LOC"}]
+Invalid example: PER
+Invalid example: ["entity":"LONDON","type":"LOC"]
+If no entities, return [].
+Text: {text}
+JSON:
+
+[zero_shot_rubric]
+You are a strict NER extractor.
+PER=person, ORG=organization/team/company, LOC=location/place, MISC=other named entity.
+Output must be valid JSON array only. No explanation, no code, no labels alone.
+Every item must be {"entity":"...","type":"PER|ORG|LOC|MISC"}.
+If uncertain, return [].
+Text: {text}
+JSON:
+
+[few_shot_caps]
+Extract named entities and return only a valid JSON array.
+
+Text: LEICESTERSHIRE BEAT NOTTINGHAMSHIRE IN CRICKET FINAL .
+Output: [{"entity":"LEICESTERSHIRE","type":"ORG"},{"entity":"NOTTINGHAMSHIRE","type":"ORG"}]
+
+Text: LONDON 1996-08-30
+Output: [{"entity":"LONDON","type":"LOC"}]
+
+Text: UNITED STATES BEAT GERMANY 2-1 .
+Output: [{"entity":"UNITED STATES","type":"LOC"},{"entity":"GERMANY","type":"LOC"}]
+
+Text: {text}
+Output:
+
+[few_shot_balanced]
+Extract entities from text. Types: PER, ORG, LOC, MISC.
+Return valid JSON array only. Do not output PER/ORG/LOC/MISC alone.
+
+Text: THE MATCH WAS PLAYED IN PARIS .
+Output: [{"entity":"PARIS","type":"LOC"}]
+
+Text: JOHN SMITH JOINS REUTERS IN NEW YORK .
+Output: [{"entity":"JOHN SMITH","type":"PER"},{"entity":"REUTERS","type":"ORG"},{"entity":"NEW YORK","type":"LOC"}]
+
+Text: THE WEATHER WAS FINE YESTERDAY .
+Output: []
+
+Text: {text}
+Output:
