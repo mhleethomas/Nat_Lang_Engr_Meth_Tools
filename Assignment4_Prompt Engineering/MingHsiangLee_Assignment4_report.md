@@ -123,84 +123,54 @@ The model is instructed to return only:
 - Prompt effect (0-shot vs few-shot)
 - Model effect (flan-t5-small vs flan-t5-base)
 
-### Test Run Results (Fast Mode)
-Run date: 2026-03-16
+### Latest Local CPU Run Results
+Run date: 2026-03-17
 
 Configuration used:
-- `USE_FAST_MODE = True`
-- `FAST_SENTENCE_LIMIT = 80`
-- Evaluated sentences: 80
-- Full evaluation size in `eng.testa`: 3,250 sentences
+- Local CPU
+- Models: `google/flan-t5-small`, `google/flan-t5-base`
+- Prompts: `zero_shot_plain`, `zero_shot_rubric`, `few_shot_caps`, `few_shot_balanced`
+- Decoding: beam search (`num_beams=4`), `max_new_tokens=256`
 
-Per-prompt metrics from test run:
-
-| Model | Prompt Template | Precision | Recall | F1 | Valid JSON Rate | Exact Sentence Match |
-|---|---|---:|---:|---:|---:|---:|
-| google/flan-t5-small | zero_shot_plain | 0.0000 | 0.0000 | 0.0000 | 1.0000 | 0.1250 |
-| google/flan-t5-small | zero_shot_rubric | 0.0000 | 0.0000 | 0.0000 | 0.3125 | 0.1250 |
-| google/flan-t5-small | few_shot_compact | 0.0000 | 0.0000 | 0.0000 | 0.0125 | 0.1250 |
-| google/flan-t5-small | few_shot_balanced | 0.0000 | 0.0000 | 0.0000 | 0.8250 | 0.1250 |
-| google/flan-t5-base | zero_shot_plain | 0.0000 | 0.0000 | 0.0000 | 0.3250 | 0.1250 |
-| google/flan-t5-base | zero_shot_rubric | 0.0000 | 0.0000 | 0.0000 | 0.0750 | 0.1250 |
-| google/flan-t5-base | few_shot_compact | 0.0000 | 0.0000 | 0.0000 | 0.0000 | 0.1250 |
-| google/flan-t5-base | few_shot_balanced | 0.0000 | 0.0000 | 0.0000 | 0.1875 | 0.1250 |
-
-0-shot vs few-shot summary:
+0-shot vs few-shot summary from the latest notebook run:
 
 | Model | Shot Type | Precision | Recall | F1 | Valid JSON Rate | Exact Sentence Match |
 |---|---|---:|---:|---:|---:|---:|
-| google/flan-t5-base | few-shot | 0.0000 | 0.0000 | 0.0000 | 0.0938 | 0.1250 |
-| google/flan-t5-base | zero-shot | 0.0000 | 0.0000 | 0.0000 | 0.2000 | 0.1250 |
-| google/flan-t5-small | few-shot | 0.0000 | 0.0000 | 0.0000 | 0.4187 | 0.1250 |
-| google/flan-t5-small | zero-shot | 0.0000 | 0.0000 | 0.0000 | 0.6563 | 0.1250 |
+| google/flan-t5-base | few-shot | 0.0000 | 0.0000 | 0.0000 | 0.00355 | 0.1985 |
+| google/flan-t5-base | zero-shot | 0.0000 | 0.0000 | 0.0000 | 0.03105 | 0.1985 |
+| google/flan-t5-small | few-shot | 0.0000 | 0.0000 | 0.0000 | 0.03740 | 0.1985 |
+| google/flan-t5-small | zero-shot | 0.0000 | 0.0000 | 0.0000 | 0.29370 | 0.1985 |
 
-Interpretation:
-- The pipeline execution is correct (data loading, prompting, parsing, logging, and metric computation all completed).
-- Extraction quality is very low for this model/prompt setup on NER (F1 = 0 in this fast smoke run).
-- Output-format reliability differs by prompt design (valid JSON rate varies strongly).
+Interpretation and evaluation:
+- **Pipeline correctness: pass.** Data loading, generation, parsing, aggregation, and logging all run successfully.
+- **Entity extraction quality: fail for this setup.** Precision/Recall/F1 are 0 for all model-shot combinations.
+- **Schema reliability: weak.** Even the best JSON validity (`flan-t5-small` zero-shot, 0.29370) means over 70% outputs are not parseable as valid target JSON.
+- **Exact sentence match (0.1985) is not a quality win.** This is mostly consistent with frequent empty predictions (`[]`) and many no-entity or mismatch cases, not correct entity extraction.
 
-### Test Run Timing and Full-Run Estimate
-Measured timings from this fast run:
-- Model load time: 2.023 seconds
-- Metric evaluation time (80 sentences): 342.843 seconds
-- Log generation time: 33.991 seconds
-- Total test run time: 378.857 seconds (6.31 minutes)
-
-Estimated full-run time for `eng.testa` (3,250 sentences), based on observed per-call speed:
-- Estimated full metric evaluation time: 13,927.993 seconds
-- Estimated full total (evaluation + logs, excluding fresh model download): 13,961.984 seconds
-- Estimated full total in minutes: 232.70 minutes
-- Estimated full total in hours: 3.88 hours
-
-Note:
-- First full run on a new machine can be longer due to model download/cache.
-- After caching, runtime should be closer to the estimate above.
+Overall judgment for current local CPU setting:
+- This is a valid and well-executed prompt-engineering experiment.
+- However, prompt changes alone with these two small FLAN-T5 models are insufficient to achieve useful NER extraction quality under a strict JSON-output evaluator.
 
 ---
 
-## 7. Test Run Analysis and Prompt Improvements
+## 7. Error Analysis of Final Run
 
-### Root Cause Analysis (Initial Test Run, F1 = 0)
+Qualitative inspection of log samples confirms that failures are now mainly output-format and extraction-behavior issues, not execution bugs.
 
-The initial fast run (80 sentences, greedy decoding) produced F1 = 0 for all model/prompt combinations. Inspection of `ner_prompt_output_logs.csv` revealed three distinct failure modes:
+Typical model outputs observed:
 
-| Failure mode | Example output | Root cause |
+| Failure mode | Example output from logs | Effect |
 |---|---|---|
-| Always-empty array | `[]` | Model not recognising ALL-CAPS tokens as named entities |
-| Hallucinated code | `a = 0 a = 0 b = 0 c = 0 for i in ...` | `zero_shot_rubric` too minimal; model reverted to code generation |
-| Malformed JSON | `["ENTITY":"LEICESTERSHIRE..."]` | Model confusing `{}` object notation with `["key":"val"]` |
+| Label-only output | `PER`, `LOC` | Not valid JSON object list; parser returns empty prediction |
+| Near-JSON but invalid syntax | `["entity": "LONDON", "type": "LOC"]` | Missing object braces; parse fails |
+| Template echo / placeholder output | `["entity": "...", "type": "..."]` | Structurally wrong and semantically empty |
+| Over-compressed pseudo list | `[Phil Simmons, batsman, batsman]` | Not valid schema; parse fails |
 
-### Improvements Applied
+This explains why the valid JSON rate is very low and why entity-level F1 remains zero.
 
-| Change | Before | After |
-|---|---|---|
-| Prompt examples | Normal-case text ("Barack Obama") | ALL-CAPS text matching CoNLL format |
-| `zero_shot_rubric` | 2-line minimal prompt | Per-type definitions + explicit "No code" rule |
-| `few_shot_compact` | Renamed to `few_shot_caps` + domain-relevant examples | |
-| Decoding | Greedy (`do_sample=False`) | Beam search (`num_beams=4`, `early_stopping=True`) |
-| `max_new_tokens` | 128 | 256 |
-| Tokenizer `max_length` | 512 | 1024 |
-| Larger model support | Not available | `flan-t5-large` / `flan-t5-xl` (commented, for Colab GPU) |
+Key conclusion from error analysis:
+- For strict NER JSON extraction, small/base FLAN-T5 on CPU is strongly constrained by generation format compliance.
+- Prompt engineering improved instruction quality, but did not overcome model capacity limits for this structured extraction target.
 
 ---
 
@@ -233,9 +203,9 @@ This satisfies the requirement to show output differences for different prompt f
 
 This assignment demonstrates prompt engineering for NER with a local CoNLL-2003 dataset, relative-path loading, model comparison, and fast/full evaluation toggle.
 
-Current status after fast test:
+Current status after latest local CPU run:
 - Functional status: pass
-- Quality status on current setup: weak (needs model/prompt improvements before final-quality submission)
+- Quality status on current setup: weak (F1 remains 0; output-format compliance is the main bottleneck)
 
 Deliverables covered:
 1. Jupyter notebook with multiple prompt designs: complete
