@@ -1,0 +1,32 @@
+{
+  "lora": {
+    "precision": 0.8082,
+    "recall": 0.5438,
+    "f1": 0.6501,
+    "parse_rate": 1.0,
+    "inference_time_s": 327.1
+  },
+  "qlora": {
+    "f1": "N/A",
+    "precision": "N/A",
+    "recall": "N/A",
+    "gpu_peak_mb": 0,
+    "time_s": 0,
+    "train_loss": "N/A",
+    "trainable_params": 4194304,
+    "trainable_pct": 0.381,
+    "parse_rate": "N/A",
+    "inference_time_s": "N/A"
+  },
+  "full_ft": {
+    "trainable_params": 1100048384,
+    "trainable_pct": 100.0,
+    "train_loss": null,
+    "time_s": null,
+    "gpu_peak_mb": 0,
+    "precision": null,
+    "recall": null,
+    "f1": null,
+    "parse_rate": null
+  }
+}
